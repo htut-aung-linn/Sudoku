@@ -9,6 +9,7 @@ $guessVlues = (array) null;
 $staticVariable = (array) null;
 
 function build_stativ(){
+    GLOBAL $staticVariable;
     for($i=0; $i<9; $i++){
         $tempV = [0,0,0,0,0,0,0,0,0];
         array_push($staticVariable, $tempV);
@@ -16,6 +17,7 @@ function build_stativ(){
 }
 
 function build_guessValue(){
+    GLOBAL $guessVlues, $domain;
     for($i=0; $i<9; $i++){
         $tempG = (array) null;
         for($j=0; $j<9; $j++){
@@ -26,6 +28,7 @@ function build_guessValue(){
 }
 
 function reduce_guessValue($y , $x, $val){
+    GLOBAL $guessVlues;
     for($i=0; $i<9; $i++){
         if(in_array($val, $guessVlues[$y][$i])){
             unset($guessVlues[$y][$i][array_search($val,$guessVlues[$y][$i])]);
@@ -59,7 +62,58 @@ function reduce_guessValue($y , $x, $val){
     }
 }
 
+function find_least_comflict(){
+    GLOBAL $guessVlues, $staticVariable;
+    $data = [0,0,10] ;//y , x , $min comflict
+    for($i=0; $i<9; $i++){
+        for($j=0; $j<9; $j++){
+            $tempMin = sizeof($guessVlues[$i][$j]);
+            if($tempMin<$data[2] && $tempMin>0 && $staticVariable[$i][$j]==0){
+                $data[0] = $i;
+                $data[1] = $j;
+                $data[2]= $tempMin;
+            }
+        }
+    }
+    //var_dump($data);
+    return $data;
+}
 
+function reduce_all(){
+    GLOBAL $staticVariable, $domain, $guessVlues;
+    for($i=0; $i<9; $i++){
+        for($j=0; $j<9; $j++){
+            $guessv = $staticVariable[$i][$j];
+            if(in_array($guessv, $guessVlues[$i][$j])){
+                reduce_guessValue($i, $j, $guessv);
+            }
+        }
+    }
+}
 
-
+function solve(){
+    GLOBAL $guessVlues, $staticVariable;
+    $data = find_least_comflict();
+    while($data[2] != 10){
+        $val = 0;
+        foreach($guessVlues[$data[0]][$data[1]] as $v){
+            //echo var_dump($v);
+            $val = $v;
+        }
+        $staticVariable[$data[0]][$data[1]] = $val;
+        reduce_guessValue($data[0] , $data[1], $val);
+        $data = find_least_comflict();
+    }
+}
+build_stativ();
+$staticVariable[3][2] = 6;
+echo "<pre>";
+//echo var_dump($staticVariable);
+build_guessValue();
+reduce_all();
+//var_dump($guessVlues);
+solve();
+echo var_dump($staticVariable);
+//$pos = find_least_comflict();
+//echo var_dump($pos);
 ?>
