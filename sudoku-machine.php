@@ -17,13 +17,23 @@ function build_stativ(){
 }
 
 function build_guessValue(){
-    GLOBAL $guessVlues, $domain;
+    GLOBAL $guessVlues, $domain, $staticVariable;
     for($i=0; $i<9; $i++){
         $tempG = (array) null;
         for($j=0; $j<9; $j++){
             array_push($tempG, $domain);
         }
         array_push($guessVlues, $tempG);
+    }
+    reduce_all();
+    for($i=0; $i<9; $i++){
+        for($j=0; $j<9; $j++){
+            if($staticVariable[$i][$j]!=0){
+                foreach($guessVlues[$i][$j] as $var){
+                    unset($guessVlues[$i][$j][array_search($var,$guessVlues[$i][$j])]);
+                }
+            }
+        }
     }
 }
 
@@ -32,11 +42,17 @@ function reduce_guessValue($y , $x, $val){
     for($i=0; $i<9; $i++){
         if(in_array($val, $guessVlues[$y][$i])){
             unset($guessVlues[$y][$i][array_search($val,$guessVlues[$y][$i])]);
+            if($val == 1){
+                echo $y . " ". $i . "," . $val. "rem <br>";
+            }
         }
     }
     for($i=0; $i<9; $i++){
         if(in_array($val, $guessVlues[$i][$x])){
             unset($guessVlues[$i][$x][array_search($val,$guessVlues[$i][$x])]);
+            if($val == 1){
+                echo $i . " ". $x . "," . $val. "rem <br>";
+            }
         }
     }
     $withinY = 0;
@@ -57,6 +73,9 @@ function reduce_guessValue($y , $x, $val){
         for($j=0; $j<3; $j++){
             if(in_array($val, $guessVlues[$withinY+$i][$withinX+$j])){
                 unset($guessVlues[$withinY+$i][$withinX+$j][array_search($val,$guessVlues[$withinY+$i][$withinX+$j])]);
+                if($val == 1){
+                    echo ($withinY+$i). " ". ($withinX+$j) . "," . $val. "rem <br>";
+                }
             }
         }
     }
@@ -78,51 +97,66 @@ function reduce_guessValue2($val){
                 }
             }
             if($r[0]==0||$r[1]==0||$r[2]==0 && $r[0]>0){
-                if($r[0]==0 && $r[1]==0 && $r[2]>0){
+                if($r[0]==0 && $r[1]==0 && $r[2]>0 && $c[0]<=1 && $c[1]<=1 && $c[2]<=1){
                     for($a = 0; $a <9; $a++){
                         if($a-($j*3)<0 || $a-($j*3)>2){
-                            unset($guessVlues[($i*3)+2][$a][array_search($val,$guessVlues[($i*3)+2][$a])]);
+                            unset($guessVlues[($i*3)+2][$a][$val-1]);
+                            echo (($i*3)+2)." ".$a.",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
-                if($r[0]==0 && $r[2]==0 && $r[1]>0){
+                if($r[0]==0 && $r[2]==0 && $r[1]>0 && $c[0]<=1 && $c[1]<=1 && $c[2]<=1){
                     for($a = 0; $a <9; $a++){
                         if($a-($j*3)<0 || $a-($j*3)>2){
                             unset($guessVlues[($i*3)+1][$a][array_search($val,$guessVlues[($i*3)+1][$a])]);
+                            echo (($i*3)+1)." ".$a.",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
-                if($r[2]==0 && $r[1]==0 && $r[0]>0){
+                if($r[2]==0 && $r[1]==0 && $r[0]>0 && $c[0]<=1 && $c[1]<=1 && $c[2]<=1){
                     for($a = 0; $a <9; $a++){
                         if($a-($j*3)<0 || $a-($j*3)>2){
                             unset($guessVlues[($i*3)][$a][array_search($val,$guessVlues[($i*3)][$a])]);
+                            echo ($i*3)." ".$a.",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
             }
             if($c[0]==0||$c[1]==0||$c[2]==0){
-                if($c[0]==0 && $c[1]==0 && $c[2]>0){
+                if($c[0]==0 && $c[1]==0 && $c[2]>0 && $r[0]<=1 && $r[1]<=1 && $r[2]<=1){
                     for($a = 0; $a <9; $a++){
                         if($a-($i*3)<0 || $a-($i*3)>2){
                             unset($guessVlues[$a][($j*3)+2][array_search($val,$guessVlues[$a][($j*3)+2])]);
+                            echo $a." ".(($j*3)+2).",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
                 
-                if($c[0]==0 && $c[2]==0 && $c[1]>0){
+                if($c[0]==0 && $c[2]==0 && $c[1]>0 && $r[0]<=1 && $r[1]<=1 && $r[2]<=1){
                     for($a = 0; $a <9; $a++){
-                        echo $a." ". (($j*3)+1).", "; 
                         if($a-($i*3)<0 || $a-($i*3)>2){
                             unset($guessVlues[$a][($j*3)+1][array_search($val,$guessVlues[$a][($j*3)+1])]);
+                            echo $a." ".(($j*3)+1).",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
-                if($c[2]==0 && $c[1]==0 && $c[0]>0){
+                if($c[2]==0 && $c[1]==0 && $c[0]>0 && $r[0]<=1 && $r[1]<=1 && $r[2]<=1){
+                    //if($val == 5){
+                     //   var_dump($c);
+                    //    var_dump($r);
+                    //}
                     for($a = 0; $a <9; $a++){
                         if($a-($i*3)<0 || $a-($i*3)>2){
                             unset($guessVlues[$a][($j*3)][array_search($val,$guessVlues[$a][($j*3)])]);
+                            echo $a." ".($j*3).",";
                         }
                     }
+                    echo $i." ".$j." ".$val."red <br>";
                 }
             }
         }
@@ -160,14 +194,17 @@ function reduce_all(){
 
 function solve(){
     GLOBAL $guessVlues, $staticVariable;
-    $data = find_least_comflict();
+    //$data = find_least_comflict();
     for($i=0; $i<5; $i++){
+        echo $i."com <br>";
         prior_knowledge();
         reduce_all();
-        for($j=0; $j<9; $j++){
-            //reduce_guessValue2($i);
-        }
-        $data = find_least_comflict();
+        //if($data[2]==10){
+        //for($j=0; $j<10; $j++){
+        //    reduce_guessValue2($j);    
+        //}
+        
+        //$data = find_least_comflict();
     }
 }
 
@@ -176,12 +213,22 @@ function prior_knowledge(){
     for($i=0; $i<9; $i++){
         for($j=0; $j<9; $j++){
             //echo var_dump($staticVariable[$i][$j]);
+            if(sizeof($guessVlues[$i][$j]) == 1){
+                foreach($guessVlues[$i][$j] as $v){
+                    echo $i." ".$j." ".$v."ab<br>";
+                    $staticVariable[$i][$j] = $v;
+                    reduce_guessValue($i, $j, $v);
+                }
+            }
             foreach($guessVlues[$i][$j] as $v){
                 if($staticVariable[$i][$j]==0){
-                    if(check_prior($i, $j, $v) == 1){
+                    if(check_prior($i, $j, $v) == 1 || check_prior_row($i, $j, $v) == 1 || check_prior_col($i, $j, $v) == 1 ){
                         $staticVariable[$i][$j] = $v;
                         reduce_guessValue($i, $j, $v);
-                        //echo var_dump($i);
+                        echo $i." ".$j." ".$v."<br>";
+                        foreach($guessVlues[$i][$j] as $var){
+                            unset($guessVlues[$i][$j][array_search($var,$guessVlues[$i][$j])]);
+                        }
                     }
                 }
                 //echo "1<br>";
@@ -222,15 +269,32 @@ function check_prior($y , $x, $val){
             if(in_array($val, $guessVlues[$withinY+$i][$withinX+$j]) && $staticVariable[$withinY+$i][$withinX+$j]==0){
                 $isPossible++;
             }
-        }
+        } 
     }
     //echo $isPossible.$val;
-    if($x==3 && $y==5){
-        echo $isPossible." ".$val."e<br>";
-    }
     return $isPossible;
 }
 
+function check_prior_row($y , $x, $val){
+    GLOBAL $guessVlues, $staticVariable;
+    $isPossible = 0;
+    for($i =0; $i<9; $i++){
+        if(in_array($val, $guessVlues[$y][$i]) && $staticVariable[$y][$i]==0){
+            $isPossible++;
+        }
+    }
+    return $isPossible;
+}
+function check_prior_col($y , $x, $val){
+    GLOBAL $guessVlues, $staticVariable;
+    $isPossible = 0;
+    for($i =0; $i<9; $i++){
+        if(in_array($val, $guessVlues[$i][$x]) && $staticVariable[$i][$x]==0){
+            $isPossible++;
+        }
+    }
+    return $isPossible;
+}
 
 build_stativ();
 $staticVariable = [
@@ -251,9 +315,9 @@ build_guessValue();
 //prior_knowledge();
 //reduce_guessValue2(9);
 //prior_knowledge();
-//var_dump($guessVlues);
 solve();
 echo var_dump($staticVariable);
+var_dump($guessVlues);
 //$pos = find_least_comflict();
 //echo var_dump($pos);
 ?>
