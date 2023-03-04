@@ -302,6 +302,7 @@ function check_prior_col($y , $x, $val){
 }
 
 build_stativ();
+/*
 $staticVariable = [
     [5,3,0,0,7,0,0,0,0],
     [6,0,0,1,9,5,0,0,0],
@@ -312,14 +313,14 @@ $staticVariable = [
     [0,6,0,0,0,0,2,8,0],
     [0,0,0,4,1,9,0,0,5],
     [0,0,0,0,8,0,0,7,9]
-];
+]; */
 //echo "<pre>";
-build_guessValue();
-solve();
+//build_guessValue();
+//solve();
 //echo "know <br>";
 //print_guess();
 //prior_knowledge();
-print_static();
+//print_static();
 //reduce_guessValue2(1);
 //print_guess();
 //reduce_all();

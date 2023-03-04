@@ -1,0 +1,116 @@
+:root{
+    --border-color : black;
+    --border-d-color : red;
+    --havor-coor: red;
+    --back-color: yellow;
+    font-size: 15px;
+}
+#main, header{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header{
+    background-color: blue;
+    margin-bottom: 1em;
+    color:white;
+}
+
+footer{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+footer{
+    align-items: flex-end;
+}
+#table, #guess-value{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.row{
+    display:flex;
+    justify-content: center;
+    width: fit-content;
+}
+
+input{
+    height:0.3in;
+    width: 0.4in;
+}
+.middle{
+    border-left: solid var(--border-color) 1px;
+    border-right: solid var(--border-color) 1px;
+}
+
+.inner{
+    border-top: solid var(--border-color) 1px;
+    border-bottom: solid var(--border-color) 1px;
+}
+
+.top{
+    border-top: solid var(--border-d-color) 3px;
+    border-bottom: solid var(--border-color) 1px;
+}
+
+.bottom{
+    border-bottom: solid var(--border-d-color) 3px;
+    border-top: solid var(--border-color) 1px;
+}
+
+.left{
+    border-left: solid var(--border-d-color) 3px;
+    border-right: solid var(--border-color) 1px;
+}
+
+.right{
+    border-right: solid var(--border-d-color) 3px;
+    border-left: solid var(--border-color) 1px;
+}
+input{
+    height:50px;
+    border:none;
+    text-align: center;
+}
+
+h1, p{
+    width:fit-content;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button{
+    width: 1.3in;
+    margin:1em;
+    padding:0.2em;
+    border: solid var(--border-d-color) 2px;
+    background-color: white;
+    border-radius: 10%;
+}
+button:hover{
+    border: dotted var(--border-color) 3px;
+    background-color: var(--back-color);
+}
+
+#btn-gp{
+    width: inherit;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+#guess-value{
+    text-align: left;
+}
+#temp{
+    display: flex;
+    justify-content: center;
+}
